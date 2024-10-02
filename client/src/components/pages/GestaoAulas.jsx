@@ -1,8 +1,12 @@
 import React from 'react';
+import Navbar from '..layout/Navbar';
 
 function GestaoAulas() {
   return (
-    <div>GestaoAulas</div>
+    <div>
+      <Navbar/>
+      GestaoAulas
+      </div>
   )
 }
 
