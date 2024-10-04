@@ -5,7 +5,7 @@ import AbreviaInstrutor from "./AbreviaInstrutor";
 import AbreviaUC from "./AbreviaUC";
 import styles from './TabelaAulas.module.css';
 
-function TabelaAulas() {
+function TabelaAulas({ tipo }) {
     const [aulas, setAulas] = useState([]);
 
     useEffect(() => {
@@ -32,8 +32,8 @@ function TabelaAulas() {
         }
     }
     return (
-        <div className= {styles.aulas}>
-            <table className= {styles.tabelaAulas}>
+        <div className={`$styles.aulas} ${tipo === 'edit' ? styles.edit : ''}`}>
+            <table className={styles.tabelaAulas}>
                 <thead>
                     <tr>
                         <th>Inicio</th>
@@ -42,17 +42,24 @@ function TabelaAulas() {
                         <th>Instrutor</th>
                         <th>Unidade Curricular</th>
                         <th>Ambiente</th>
+                        {tipo === 'edit' && <th>Ações</th>}
                     </tr>
                 </thead>
                 <tbody>
                     {aulas.map((aula) => (
                         <tr key={aula.id}>
                             <td><AbreviaData data={aula.data_hora_inicio} /></td>
-                            <td><AbreviaData data={aula.data_hora_fim}/></td>
+                            <td><AbreviaData data={aula.data_hora_fim} /></td>
                             <td>{aula.turma}</td>
-                            <td><AbreviaInstrutor nome={aula.instrutor}/></td>
-                            <td><AbreviaUC materia= {aula.unidade_curricular}/></td>
-                            <td><AbreviaAmbiente ambientes = {aula.ambiente}/></td>
+                            <td><AbreviaInstrutor nome={aula.instrutor} /></td>
+                            <td><AbreviaUC materia={aula.unidade_curricular} /></td>
+                            <td><AbreviaAmbiente ambiente={aula.ambiente} /></td>
+                            {tipo === 'edit' &&
+                                <td>
+                                    <button className="btn btn-warning ms-2">Editar</button>
+                                    <button className="btn btn-danger ms-2">Deletar</button>
+                                </td>
+                            }
                         </tr>
                     ))}
                 </tbody>
