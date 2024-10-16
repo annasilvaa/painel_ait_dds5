@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import Navbar from '../layout/Navbar';
+import Navbar from '../layout/NavBar';
 import TabelaAulas from '../tabelaAulas/TabelaAulas';
 import { Link, useParams } from 'react-router-dom';
 
