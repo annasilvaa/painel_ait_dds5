@@ -1,6 +1,7 @@
 import { createAula, updateAula } from "../models/AulaModel.js";
 import { showAulas } from "../models/AulaModel.js";
 import { deleteAula } from "../models/AulaModel.js";
+import { showOneAula } from "../models/AulaModel.js";
 
 export async function criarAula(req,res) {
     // Ao ser chamado o criarAula controller virá no console
@@ -67,3 +68,20 @@ try {
     res.status(500).json(error);
 }
 }
+
+export async function mostrarUmaAula(req,res) {
+     // Ao ser chamado o mostrar controller virá no console
+     console.log('AulaController mostrarUmaAula');
+
+     //Criando constante com a requisição
+     const {id} = req.params;
+ 
+ // Tentando mostrar aulas
+ try {
+     const [status, resposta] = await showOneAula(id);
+     res.status(status).json(resposta);
+ } catch (error) {
+     console.log(error);
+     res.status(500).json(error);
+ }
+ }
