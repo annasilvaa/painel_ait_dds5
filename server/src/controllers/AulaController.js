@@ -2,17 +2,21 @@ import { createAula, updateAula } from "../models/AulaModel.js";
 import { showAulas } from "../models/AulaModel.js";
 import { deleteAula } from "../models/AulaModel.js";
 import { showOneAula } from "../models/AulaModel.js";
+import { isNullOrEmpty, verificaAula } from "../validations/AulaValidation.js";
 
-export async function criarAula(req,res) {
+export async function criarAula(req, res) {
     // Ao ser chamado o criarAula controller virá no console
-    console.log ('AulaController criarAula');
+    console.log('AulaController criarAula');
 
     // Criando constante com a requisição
     const aula = req.body;
 
     //Exibindo corpo da requisição
     console.log(aula);
-    
+
+    if (verificaAula(aula)) {
+        res.status(400).json({ message: 'Todas as propriedades devem ser preenchidas' });
+    } else {
     // Tentando criar aula 
     try {
         const [status, resposta] = await createAula(aula);
@@ -21,67 +25,73 @@ export async function criarAula(req,res) {
         console.log(error);
         res.status(500).json(error);
     }
+  }
 }
 
 export async function mostrarAulas(req, res) {
     const aula = req.body;
-   
+
     try {
         const [status, resposta] = await showAulas(aula);
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error);
-        res.status(502).json(error); 
+        res.status(502).json(error);
     }
 
 }
-export async function atualizarAula(req,res){
+export async function atualizarAula(req, res) {
     // Ao ser chamado o criarAula controller virá no console
     console.log('AulaController atualizarAula');
 
     //Criando constante com a requisição
     const aula = req.body;
-    const {id} = req.params;
-
+    const { id } = req.params;
+    if(verificaAula(aula)|| isNullOrEmpty(id)){
+        res.status(400).json({ message: 'Todas as propriedades devem ser preenchidas' });
+    } else {
     // Tentando mostrar aulas
     try {
-        const [status, resposta] = await updateAula(aula,id);
+        const [status, resposta] = await updateAula(aula, id);
         res.status(status).json(resposta);
     } catch (error) {
         console.log(error);
         res.status(500).json(error);
     }
 }
-export async function excluirAula(req,res) {
+}
+export async function excluirAula(req, res) {
     // Ao ser chamado o criarAula controller virá no console
     console.log('AulaController excluirAula');
 
     //Criando constante com a requisição
-    const {id} = req.params;
-
-// Tentando mostrar aulas
-try {
-    const [status, resposta] = await deleteAula(id);
-    res.status(status).json(resposta);
-} catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    const { id } = req.params;
+    if(isNullOrEmpty(id)) {
+        res.status(400).json({ message: 'O id deve ser informado' });
+    } else {
+    // Tentando mostrar aulas
+    try {
+        const [status, resposta] = await deleteAula(id);
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
 }
+
+export async function mostrarUmaAula(req, res) {
+    // Ao ser chamado o mostrar controller virá no console
+    console.log('AulaController mostrarUmaAula');
+
+    //Criando constante com a requisição
+    const { id } = req.params;
+
+    // Tentando mostrar aulas
+    try {
+        const [status, resposta] = await showOneAula(id);
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
 }
-
-export async function mostrarUmaAula(req,res) {
-     // Ao ser chamado o mostrar controller virá no console
-     console.log('AulaController mostrarUmaAula');
-
-     //Criando constante com a requisição
-     const {id} = req.params;
- 
- // Tentando mostrar aulas
- try {
-     const [status, resposta] = await showOneAula(id);
-     res.status(status).json(resposta);
- } catch (error) {
-     console.log(error);
-     res.status(500).json(error);
- }
- }
